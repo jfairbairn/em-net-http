@@ -14,14 +14,14 @@ Gem::Specification.new do |s|
   s.email = %q{james@netlagoon.com}
   s.extra_rdoc_files = [
     "LICENSE",
-     "README.rdoc"
+     "README.md"
   ]
   s.files = [
     ".document",
      ".gitignore",
      "Gemfile",
      "LICENSE",
-     "README.rdoc",
+     "README.md",
      "Rakefile",
      "VERSION",
      "em-net-http.gemspec",
