@@ -1,29 +1,7 @@
-$: << '.'
-require File.dirname(__FILE__) + '/em-net-http'
+$: << File.dirname(__FILE__)
+require 'em-net-http'
 require 'weary'
-
-module Weary
-  class Response
-    def content_type ; @content_type.split(';').first ; end
-    
-    def value ; self ; end
-  end
- 
-  class Request
-    def perform!(&block)
-      @on_complete = block if block_given?
-      before_send.call(self) if before_send
-      req = http.request(request)
-      response = Response.new(req, self)
-      if response.redirected? && follows?
-        response.follow_redirect
-      else
-        on_complete.call(response) if on_complete
-        response
-      end
-    end
-  end
-end
+require 'em-net-http/weary'
 
 EM.run do
   Fiber.new do

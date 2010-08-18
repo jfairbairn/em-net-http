@@ -64,6 +64,7 @@ module Net
     def request(req, body = nil, &block)
       f=Fiber.current
       uri = Addressable::URI.parse("#{use_ssl? ? 'https://' : 'http://'}#{addr_port}#{req.path}")
+      body = body || req.body
       opts = body.nil? ? {} : {:body => body}
       if use_ssl?
         sslopts = opts[:ssl] = {}
@@ -71,6 +72,11 @@ module Net
         sslopts[:private_key_file] = key if key
         sslopts[:cert_chain_file] = ca_file if ca_file
       end
+      headers = opts[:head] = {}
+      req.each do |k, v|
+        headers[k] = v
+      end
+      headers['content-type'] ||= "application/x-www-form-urlencoded"
       httpreq = EM::HttpRequest.new(uri).send(req.class::METHOD.downcase.to_sym, opts)
       httpreq.callback {|res|f.resume(EM::NetHTTPResponse.new(res))}
       httpreq.errback {|res|f.resume(EM::NetHTTPResponse.new(res))}
@@ -81,4 +87,7 @@ module Net
     
   end
 end
+
+# Other bits and bobs.
+
 
