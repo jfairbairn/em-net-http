@@ -6,7 +6,7 @@ EM.run do
     http = Net::HTTP.new('www.google.com') 
     http.start do |http|
       res = http.get('/search?q=james')
-      p res['transfer-encoding']
+      puts res.body
     end
     EM.stop_event_loop
   end.resume
