@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
      "em-net-http.gemspec",
      "lib/em-net-http.rb",
      "lib/test.rb",
+     "lib/test_weary.rb",
      "spec/em-net-http_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
@@ -47,11 +48,17 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_development_dependency(%q<weary>, [">= 0"])
+      s.add_development_dependency(%q<right_aws>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<weary>, [">= 0"])
+      s.add_dependency(%q<right_aws>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<weary>, [">= 0"])
+    s.add_dependency(%q<right_aws>, [">= 0"])
   end
 end
 
