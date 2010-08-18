@@ -19,3 +19,6 @@ rdoc
 pkg
 
 ## PROJECT::SPECIFIC
+.bundle
+Gemfile.lock
+ref
