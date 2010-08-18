@@ -19,11 +19,14 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "Gemfile",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "em-net-http.gemspec",
      "lib/em-net-http.rb",
+     "lib/test.rb",
      "spec/em-net-http_spec.rb",
      "spec/spec.opts",
      "spec/spec_helper.rb"
