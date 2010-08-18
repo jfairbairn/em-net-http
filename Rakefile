@@ -5,8 +5,8 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "em-net-http"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Non-blocking replacement for Net::HTTP, for use in EventMachine}
+    gem.description = %Q{Monkeypatching Net::HTTP to use em-http-request under the hood.}
     gem.email = "james@netlagoon.com"
     gem.homepage = "http://github.com/jfairbairn/em-net-http"
     gem.authors = ["James Fairbairn"]
