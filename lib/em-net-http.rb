@@ -65,6 +65,12 @@ module Net
       f=Fiber.current
       uri = Addressable::URI.parse("#{use_ssl? ? 'https://' : 'http://'}#{addr_port}#{req.path}")
       opts = body.nil? ? {} : {:body => body}
+      if use_ssl?
+        sslopts = opts[:ssl] = {}
+        sslopts[:verify_peer] = verify_mode == OpenSSL::SSL::VERIFY_PEER
+        sslopts[:private_key_file] = key if key
+        sslopts[:cert_chain_file] = ca_file if ca_file
+      end
       httpreq = EM::HttpRequest.new(uri).send(req.class::METHOD.downcase.to_sym, opts)
       httpreq.callback {|res|f.resume(EM::NetHTTPResponse.new(res))}
       httpreq.errback {|res|f.resume(EM::NetHTTPResponse.new(res))}

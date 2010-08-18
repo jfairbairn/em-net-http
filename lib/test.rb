@@ -3,8 +3,7 @@ require File.dirname(__FILE__) + '/em-net-http'
 
 EM.run do
   Fiber.new do
-    http = Net::HTTP.new('www.google.com') 
-    http.start do |http|
+    Net::HTTP.start('encrypted.google.com', :use_ssl=>true, :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |http|
       res = http.get('/search?q=james')
       puts res.body
     end
