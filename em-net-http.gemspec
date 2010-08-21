@@ -5,13 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{em-net-http}
-  s.version = "0.1.3"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Fairbairn"]
-  s.date = %q{2010-08-18}
+  s.date = %q{2010-08-21}
   s.description = %q{Monkeypatching Net::HTTP to use em-http-request under the hood.}
   s.email = %q{james@netlagoon.com}
+  s.executables = ["autospec", "htmldiff", "ldiff", "oauth", "rackup", "rake", "spec", "tumblr"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.md"
@@ -49,17 +50,23 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_development_dependency(%q<mimic>, [">= 0.3.0"])
       s.add_development_dependency(%q<weary>, [">= 0"])
       s.add_development_dependency(%q<right_aws>, [">= 0"])
+      s.add_development_dependency(%q<tumblr-rb>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 1.2.9"])
+      s.add_dependency(%q<mimic>, [">= 0.3.0"])
       s.add_dependency(%q<weary>, [">= 0"])
       s.add_dependency(%q<right_aws>, [">= 0"])
+      s.add_dependency(%q<tumblr-rb>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 1.2.9"])
+    s.add_dependency(%q<mimic>, [">= 0.3.0"])
     s.add_dependency(%q<weary>, [">= 0"])
     s.add_dependency(%q<right_aws>, [">= 0"])
+    s.add_dependency(%q<tumblr-rb>, [">= 0"])
   end
 end
 
