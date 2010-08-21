@@ -11,10 +11,10 @@ begin
     gem.homepage = "http://github.com/jfairbairn/em-net-http"
     gem.authors = ["James Fairbairn"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_development_dependency "weary"
-    gem.add_development_dependency "right_aws"
-    
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+    gem.add_development_dependency "mimic", ">= 0.3.0"
+    gem.add_development_dependency 'weary'
+    gem.add_development_dependency 'right_aws'
+    gem.add_development_dependency 'tumblr-rb'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError

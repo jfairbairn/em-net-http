@@ -21,9 +21,13 @@ fiber:
     
 The above will run without blocking your carefully-tuned nonblocking webapp.
 
-I have vaguely tested <tt>em-net-http</tt> with <tt>[right_aws][3]</tt>,
-[Weary][4] and the [Tumblr gem][5]. There's no actual unit tests as such; if you're
-feeling smarter than I am, please feel free to contribute some! <tt>:-)</tt>
+There are a few tests (taking advantage of Luke Redpath's very useful [Mimic][6] gem)
+that assert that responses are identical to those created by <tt>Net::HTTP</tt>.
+These are by no means exhaustive; if you're using <tt>Net::HTTP</tt> in some other way
+and the <tt>em-net-http</tt>'s behaviour is not what you expect, do send me a failing test
+case.
+
+Currently tested with Ruby (MRI) 1.9.1 and 1.9.2.
 
 ### Caveat
 
@@ -36,3 +40,4 @@ therefore vary. Please feed me patches, pull requests and bug reports!
 [3]: http://rightaws.rubyforge.org/
 [4]: http://github.com/mwunsch/weary
 [5]: http://github.com/mwunsch/tumblr
+[6]: http://github.com/lukeredpath/mimic
