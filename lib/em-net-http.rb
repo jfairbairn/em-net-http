@@ -92,6 +92,7 @@ module Net
         sslopts[:private_key_file] = key if key
         sslopts[:cert_chain_file] = ca_file if ca_file
       end
+      opts[:timeout] = self.read_timeout
 
       headers = opts[:head] = {}
       req.each do |k, v|
@@ -106,6 +107,8 @@ module Net
 
       convert_em_http_response = lambda do |res|
         emres = EM::NetHTTP::Response.new(res)
+        p emres
+        p emres.code
         nhresclass = Net::HTTPResponse.response_class(emres.code)
         nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
         emres.to_hash.each do |k, v|
@@ -117,8 +120,9 @@ module Net
       end
 
       httpreq.callback &convert_em_http_response
-      httpreq.errback &convert_em_http_response
+      httpreq.errback {|err|f.resume(:error)}
       res = Fiber.yield
+      raise 'EM::HttpRequest error - request timed out?' if res == :error
       yield res if block_given?
       res
     end
