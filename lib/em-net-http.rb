@@ -107,8 +107,6 @@ module Net
 
       convert_em_http_response = lambda do |res|
         emres = EM::NetHTTP::Response.new(res)
-        p emres
-        p emres.code
         nhresclass = Net::HTTPResponse.response_class(emres.code)
         nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
         emres.to_hash.each do |k, v|

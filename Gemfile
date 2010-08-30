@@ -9,4 +9,5 @@ group :development do
   gem 'tumblr-rb'
   gem 'mimic', '>= 0.3.0'
   gem 'rake'
+  gem 'jeweler'
 end
