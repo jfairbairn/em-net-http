@@ -12,7 +12,6 @@ Gem::Specification.new do |s|
   s.date = %q{2010-08-30}
   s.description = %q{Monkeypatching Net::HTTP to use em-http-request under the hood.}
   s.email = %q{james@netlagoon.com}
-  s.executables = ["autospec", "htmldiff", "ldiff", "oauth", "rackup", "rake", "spec", "tumblr"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.md"
