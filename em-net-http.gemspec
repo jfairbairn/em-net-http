@@ -5,13 +5,14 @@
 
 Gem::Specification.new do |s|
   s.name = %q{em-net-http}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Fairbairn"]
   s.date = %q{2010-08-30}
   s.description = %q{Monkeypatching Net::HTTP to use em-http-request under the hood.}
   s.email = %q{james@netlagoon.com}
+  s.executables = ["autospec", "edit_json.rb", "htmldiff", "jeweler", "ldiff", "oauth", "prettify_json.rb", "rackup", "rake", "rubyforge", "spec", "tumblr"]
   s.extra_rdoc_files = [
     "LICENSE",
      "README.md"
