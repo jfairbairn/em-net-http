@@ -10,6 +10,7 @@ begin
     gem.email = "james@netlagoon.com"
     gem.homepage = "http://github.com/jfairbairn/em-net-http"
     gem.authors = ["James Fairbairn"]
+    gem.add_dependency 'em-http-request', '>= 0.2.10'
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "mimic", ">= 0.3.0"
     gem.add_development_dependency 'weary'
