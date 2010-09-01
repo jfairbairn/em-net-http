@@ -101,6 +101,7 @@ module Net
 
       headers['content-type'] ||= "application/x-www-form-urlencoded"
       
+      t0 = Time.now
       httpreq = EM::HttpRequest.new(uri).send(req.class::METHOD.downcase.to_sym, opts)
 
       f=Fiber.current
@@ -120,7 +121,11 @@ module Net
       httpreq.callback &convert_em_http_response
       httpreq.errback {|err|f.resume(:error)}
       res = Fiber.yield
-      raise 'EM::HttpRequest error - request timed out?' if res == :error
+      if res == :error
+        raise 'EM::HttpRequest error - request timed out' if Time.now - self.read_timeout > t0
+        raise 'EM::HttpRequest error - unknown error'
+      end
+      
       yield res if block_given?
       res
     end
