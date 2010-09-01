@@ -78,6 +78,15 @@ module Net
   class HTTP
     alias_method :orig_net_http_request, :request
     
+    alias_method :orig_net_http_do_start, :do_start
+    
+    def do_start
+
+      return orig_net_http_do_start unless ::EM.reactor_running?
+
+      @started = true
+    end
+    
     def request(req, body = nil, &block)
 
       return orig_net_http_request(req, body, &block) unless ::EM.reactor_running?
