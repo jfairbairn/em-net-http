@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{em-net-http}
-  s.version = "0.2.3"
+  s.version = "0.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["James Fairbairn"]
-  s.date = %q{2010-08-30}
+  s.date = %q{2010-09-01}
   s.description = %q{Monkeypatching Net::HTTP to use em-http-request under the hood.}
   s.email = %q{james@netlagoon.com}
   s.extra_rdoc_files = [
