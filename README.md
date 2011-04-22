@@ -21,7 +21,7 @@ fiber:
     
 The above will run without blocking your carefully-tuned nonblocking webapp.
 
-There are a few tests (taking advantage of Luke Redpath's very useful [Mimic][6] gem)
+There are a few tests (taking advantage of the very useful [Mimic][6] gem)
 that assert that responses are identical to those created by <tt>Net::HTTP</tt>.
 These are by no means exhaustive; if you're using <tt>Net::HTTP</tt> in some other way
 and the <tt>em-net-http</tt>'s behaviour is not what you expect, do send me a failing test
@@ -31,9 +31,13 @@ Currently tested with Ruby (MRI) 1.9.1 and 1.9.2.
 
 ### Caveat
 
-The <tt>Net::HTTP</tt> API is a many-headed hydra -- I haven't patched much of it;
-in fact I've patched <tt>Net::HTTP#request</tt>, and that's it. Your mileage may
-therefore vary. Please feed me patches, pull requests and bug reports!
+The <tt>Net::HTTP</tt> API is a many-headed hydra -- I haven't patched much of it.
+Your mileage may therefore vary. Please feed me patches, pull requests and bug reports!
+
+### Thanks
+
+ * [Luke Redpath][7], for [Mimic][6].
+ * [Mathieu Ravaux][8], for adding streaming and buffering support.
 
 [1]: http://github.com/igrigorik/em-http-request
 [2]: http://rubyeventmachine.com/
@@ -41,3 +45,5 @@ therefore vary. Please feed me patches, pull requests and bug reports!
 [4]: http://github.com/mwunsch/weary
 [5]: http://github.com/mwunsch/tumblr
 [6]: http://github.com/lukeredpath/mimic
+[7]: http://lukeredpath.co.uk/
+[8]: http://mathieuravaux.com/
