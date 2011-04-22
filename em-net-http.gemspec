@@ -48,6 +48,9 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<em-net-http>, [">= 0"])
       s.add_runtime_dependency(%q<rake>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.5"])
+      s.add_development_dependency(%q<mimic>, [">= 0.3.0"])
+      s.add_development_dependency(%q<weary>, [">= 0"])
       s.add_runtime_dependency(%q<eventmachine>, [">= 0.12.10"])
       s.add_runtime_dependency(%q<addressable>, [">= 0"])
       s.add_runtime_dependency(%q<em-http-request>, [">= 0.2.10"])
@@ -57,6 +60,9 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<em-net-http>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.5"])
+      s.add_dependency(%q<mimic>, [">= 0.3.0"])
+      s.add_dependency(%q<weary>, [">= 0"])
       s.add_dependency(%q<eventmachine>, [">= 0.12.10"])
       s.add_dependency(%q<addressable>, [">= 0"])
       s.add_dependency(%q<em-http-request>, [">= 0.2.10"])
@@ -67,6 +73,9 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<em-net-http>, [">= 0"])
     s.add_dependency(%q<rake>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.5"])
+    s.add_dependency(%q<mimic>, [">= 0.3.0"])
+    s.add_dependency(%q<weary>, [">= 0"])
     s.add_dependency(%q<eventmachine>, [">= 0.12.10"])
     s.add_dependency(%q<addressable>, [">= 0"])
     s.add_dependency(%q<em-http-request>, [">= 0.2.10"])
