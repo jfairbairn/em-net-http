@@ -1,9 +1,38 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "em-net-http" do
+
+  it 'should support streaming the response' do
+    assert_identical(:streamed => true) {
+      body = StringIO.new '', 'wb'
+
+      Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
+        http.request_get "/image" do |resp|
+          resp.should be_a_kind_of(Net::HTTPOK)
+          resp.read_body { |chunk| body.write chunk }
+          resp
+        end
+      end.tap do |resp|
+        resp.instance_variable_set :@streamed_body, body.string
+      end
+    }
+  end
+
+  it 'should support buffering the response' do
+    assert_identical {
+      Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
+        resp = http.request_get "/image" do |resp|
+          resp.should be_a_kind_of(Net::HTTPOK)
+          resp.read_body
+          resp
+        end
+      end
+    }
+  end
+
   describe 'should be compatible' do
     it 'for Net::HTTP.get()' do
-      run_requests {Net::HTTP.get(URI.parse('http://localhost/hello'))}
+      run_requests {Net::HTTP.get(URI.parse("http://localhost:#{Mimic::MIMIC_DEFAULT_PORT}/hello"))}
       @expected_res.should == @actual_res
     end
 
@@ -17,7 +46,10 @@ describe "em-net-http" do
       it "for Net::HTTP.start(host, port, &block) with response code #{code}" do
         assert_identical {
           Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
-            http.get("/code/#{code}")
+            http.get("/code/#{code}").tap { |resp|
+              # Force the response to be buffered while we are still in the EM loop, since we shut it down EM before the verifications
+              resp.body
+            }
           end
         }
       end
@@ -68,18 +100,20 @@ describe "em-net-http" do
     end
   end
   
-  def assert_identical(&block)
+  def assert_identical(streamed=false, &block)
     run_requests(&block)
-    @actual_res.should match_response(@expected_res)
+    @actual_res.should be_a_kind_of(Net::HTTPResponse)
+    @actual_res.should match_response(@expected_res, :streamed => streamed)
   end
   
-  def match_response(expected)
-    ResponseMatcher.new(expected)
+  def match_response(expected, streamed=false)
+    ResponseMatcher.new(expected, streamed)
   end
   
   class ResponseMatcher
-    def initialize(expected)
+    def initialize(expected, streamed=false)
       @expected = expected
+      @streamed = streamed
     end
     
     def matches?(actual)
@@ -88,8 +122,16 @@ describe "em-net-http" do
       actual_date = Time.parse(actual.delete('date').join)
       actual_date.should >= expected_date
       actual_date.should <= expected_date + 2
-      [:class, :code, :to_hash, :body].each do |i|
-        actual.send(i).should == @expected.send(i)
+
+      actual.class.should == @expected.class
+      actual.code.should == @expected.code
+      actual.to_hash.should == @expected.to_hash.merge({"connection" => ['close']})
+
+      if @streamed
+        actual.instance_variable_get(:@streamed_body).should ==
+          @expected.instance_variable_get(:@streamed_body)
+      else
+        actual.body.should == @expected.body
       end
       true
     end

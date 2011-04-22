@@ -10,12 +10,16 @@ module EventMachine
       attr_reader :code, :body, :header, :message, :http_version
       alias_method :msg, :message
     
-      def initialize(res)
-        @code = res.response_header.http_status
-        @message = res.response_header.http_reason
-        @http_version = res.response_header.http_version
-        @header = res.response_header
-        @body = res.response
+      def initialize(response_header)
+        @code = response_header.http_status
+        @message = response_header.http_reason
+        @http_version = response_header.http_version
+        @header = response_header
+      end
+
+      def set_body body
+        @already_buffered = true
+        @body = body
       end
     
       def content_type
@@ -70,8 +74,28 @@ module Net
     alias_method :orig_net_http_read_body, :read_body
 
     def read_body(dest=nil, &block)
+      return @body if @already_buffered
       return orig_net_http_read_body(dest, &block) unless ::EM.reactor_running?
-      @body
+      if block_given?
+        f = Fiber.current
+        @httpreq.callback { |res| f.resume }
+        @httpreq.stream &block
+        Fiber.yield
+      else
+        unless @body || @already_buffered
+          if self.class.body_permitted?
+            f = Fiber.current
+            io = StringIO.new '', 'wb'
+            io.set_encoding 'ASCII-8BIT'
+            @httpreq.callback { |res| f.resume io.string }
+            @httpreq.errback { |err| f.resume err }
+            @httpreq.stream { |chunk| io.write chunk }
+            @body = Fiber.yield
+          end
+          @already_buffered = true
+        end
+        @body
+      end
     end
   end
   
@@ -116,7 +140,8 @@ module Net
       f=Fiber.current
 
       convert_em_http_response = lambda do |res|
-        emres = EM::NetHTTP::Response.new(res)
+        emres = EM::NetHTTP::Response.new(res.response_header)
+        emres.set_body res.response
         nhresclass = Net::HTTPResponse.response_class(emres.code)
         nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
         emres.to_hash.each do |k, v|
@@ -127,16 +152,35 @@ module Net
         f.resume nhres
       end
 
-      httpreq.callback &convert_em_http_response
-      httpreq.errback {|err|f.resume(:error)}
-      res = Fiber.yield
-      if res == :error
-        raise 'EM::HttpRequest error - request timed out' if Time.now - self.read_timeout > t0
-        raise 'EM::HttpRequest error - unknown error'
-      end
       
-      yield res if block_given?
-      res
+      if block_given?
+        httpreq.headers { |headers|
+
+          emres = EM::NetHTTP::Response.new(headers)
+          nhresclass = Net::HTTPResponse.response_class(emres.code)
+          nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
+          emres.to_hash.each do |k, v|
+            nhres.add_field(k, v)
+          end
+          f.resume nhres
+        }
+
+        nhres = Fiber.yield
+        nhres.instance_variable_set :@httpreq, httpreq
+
+        yield nhres
+      else
+        httpreq.callback &convert_em_http_response
+        httpreq.errback {|err|f.resume(:error)}
+        res = Fiber.yield
+
+        if res == :error
+          raise 'EM::HttpRequest error - request timed out' if Time.now - self.read_timeout > t0
+          raise 'EM::HttpRequest error - unknown error'
+        end
+
+        res
+      end
     end
     
   end
