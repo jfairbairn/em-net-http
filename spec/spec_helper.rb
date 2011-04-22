@@ -15,6 +15,18 @@ RSpec.configure do |config|
       
       get('/hello').returning('Hello World!', 200, {'Content-Type'=>'text/plain'})
       
+      class BigImageResponse
+        def each
+          ::File.open('spec/image.jpg', "rb") { |file|
+            while part = file.read(8192)
+              yield part
+            end
+          }
+        end
+      end
+      resp = BigImageResponse.new
+      get('/image').returning(resp, 200, {"Content-Type" => 'image/jpeg'})
+
       post('/testpost') do
         "You said #{request.body.read}."
       end
