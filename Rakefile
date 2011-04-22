@@ -16,8 +16,6 @@ begin
     gem.add_development_dependency "rspec", "~> 2.5"
     gem.add_development_dependency "mimic", ">= 0.3.0"
     gem.add_development_dependency 'weary'
-    gem.add_development_dependency 'right_aws'
-    gem.add_development_dependency 'tumblr-rb'
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
