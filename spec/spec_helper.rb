@@ -2,12 +2,11 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'em-net-http'
 require 'time'
-require 'spec'
-require 'spec/autorun'
+require 'rspec'
 
 require 'mimic'
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.before(:all) do
     Mimic.mimic do
       Net::HTTPResponse::CODE_TO_OBJ.each do |code, klass|
