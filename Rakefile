@@ -13,7 +13,7 @@ begin
     gem.add_dependency 'eventmachine', '>= 0.12.10'
     gem.add_dependency 'addressable'
     gem.add_dependency 'em-http-request', '>= 0.2.10'
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", "~> 2.5"
     gem.add_development_dependency "mimic", ">= 0.3.0"
     gem.add_development_dependency 'weary'
     gem.add_development_dependency 'right_aws'
