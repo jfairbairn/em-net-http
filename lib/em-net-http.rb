@@ -169,6 +169,7 @@ module Net
         nhres.instance_variable_set :@httpreq, httpreq
 
         yield nhres
+        nhres
       else
         httpreq.callback &convert_em_http_response
         httpreq.errback {|err|f.resume(:error)}

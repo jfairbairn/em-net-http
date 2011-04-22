@@ -21,11 +21,12 @@ describe "em-net-http" do
   it 'should support buffering the response' do
     assert_identical {
       Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
-        resp = http.request_get "/image" do |resp|
+        respone = http.request_get "/image" do |resp|
           resp.should be_a_kind_of(Net::HTTPOK)
-          resp.read_body
+          resp.read_body # force reading the body before the test tears down the EM loop
           resp
         end
+        respone.tap { respone.should be_a_kind_of(Net::HTTPOK) }
       end
     }
   end
