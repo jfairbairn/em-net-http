@@ -9,7 +9,7 @@ module EventMachine
     class Response
       attr_reader :code, :body, :header, :message, :http_version
       alias_method :msg, :message
-    
+
       def initialize(response_header)
         @code = response_header.http_status
         @message = response_header.http_reason
@@ -21,23 +21,23 @@ module EventMachine
         @already_buffered = true
         @body = body
       end
-    
+
       def content_type
         self['content-type']
       end
-    
+
       def [](k)
         @header[key(k)]
       end
-    
+
       def key?(k)
         @header.key? key(k)
       end
-    
+
       def read_body(dest=nil,&block)
         @body
       end
-    
+
       def to_hash
         h={}
         @header.each do |k, v|
@@ -45,32 +45,32 @@ module EventMachine
         end
         h
       end
-      
+
       private
       def key(k)
         k.upcase.tr('-','_')
       end
-    
+
       def fromkey(k)
         k.tr('_', '-').split('-').map{|i|i.capitalize}.join('-')
       end
-    
+
       include Enumerable
       def each(&blk)
         @header.each(&blk)
       end
-    
+
     end
   end
 end
-  
+
 
 module Net
   class HTTPResponse
     class << self
       public :response_class
     end
-    
+
     alias_method :orig_net_http_read_body, :read_body
 
     def read_body(dest=nil, &block)
@@ -98,19 +98,19 @@ module Net
       end
     end
   end
-  
+
   class HTTP
     alias_method :orig_net_http_request, :request
-    
+
     alias_method :orig_net_http_do_start, :do_start
-    
+
     def do_start
 
       return orig_net_http_do_start unless ::EM.reactor_running?
 
       @started = true
     end
-    
+
     def request(req, body = nil, &block)
 
       return orig_net_http_request(req, body, &block) unless ::EM.reactor_running?
@@ -133,7 +133,7 @@ module Net
       end
 
       headers['content-type'] ||= "application/x-www-form-urlencoded"
-      
+
       t0 = Time.now
       httpreq = EM::HttpRequest.new(uri).send(req.class::METHOD.downcase.to_sym, opts)
 
@@ -152,7 +152,7 @@ module Net
         f.resume nhres
       end
 
-      
+
       if block_given?
         httpreq.headers { |headers|
 
@@ -164,8 +164,9 @@ module Net
           end
           f.resume nhres
         }
+        httpreq.errback {|err|f.resume(:error)}
 
-        nhres = Fiber.yield
+        nhres = yield_with_error_check
         nhres.instance_variable_set :@httpreq, httpreq
 
         yield nhres
@@ -173,17 +174,24 @@ module Net
       else
         httpreq.callback &convert_em_http_response
         httpreq.errback {|err|f.resume(:error)}
-        res = Fiber.yield
 
-        if res == :error
-          raise 'EM::HttpRequest error - request timed out' if Time.now - self.read_timeout > t0
-          raise 'EM::HttpRequest error - unknown error'
-        end
-
-        res
+        yield_with_error_check
       end
     end
-    
+
+    private
+
+    def yield_with_error_check
+      res = Fiber.yield
+
+      if res == :error
+        raise 'EM::HttpRequest error - request timed out' if Time.now - self.read_timeout > t0
+        raise 'EM::HttpRequest error - unknown error'
+      end
+
+      res
+    end
+
   end
 end
 
