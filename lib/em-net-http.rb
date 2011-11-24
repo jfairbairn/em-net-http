@@ -11,7 +11,7 @@ module EventMachine
       alias_method :msg, :message
     
       def initialize(response_header)
-        @code = response_header.http_status
+        @code = response_header.http_status.to_s
         @message = response_header.http_reason
         @http_version = response_header.http_version
         @header = response_header
