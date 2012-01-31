@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/jfairbairn/em-net-http.png)](http://travis-ci.org/jfairbairn/em-net-http])
+
 Most Ruby web API libraries use <tt>Net::HTTP</tt> (because it's ubiquitous),
 but I want to use them in my non-blocking EventMachine-based applications, and
 I don't want Net::HTTP to block. I therefore wrote this.
