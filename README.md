@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/jfairbairn/em-net-http.png)](http://travis-ci.org/jfairbairn/em-net-http])
+[![Build Status](https://secure.travis-ci.org/jfairbairn/em-net-http.png)](http://travis-ci.org/jfairbairn/em-net-http)
 
 Most Ruby web API libraries use <tt>Net::HTTP</tt> (because it's ubiquitous),
 but I want to use them in my non-blocking EventMachine-based applications, and
@@ -40,7 +40,7 @@ Your mileage may therefore vary. Please feed me patches, pull requests and bug r
 
  * [Luke Redpath][7], for [Mimic][6].
  * [Mathieu Ravaux][8], for adding streaming and buffering support.
- * [Jon Swope][9] and [Ary Borenszweig][10], for bug fixes.
+ * [Jon Swope][9], [Ary Borenszweig][10], [Neeraj][11] and [Ilya Maykov][12] for bug fixes.
 
 [1]: http://github.com/igrigorik/em-http-request
 [2]: http://rubyeventmachine.com/
@@ -52,3 +52,5 @@ Your mileage may therefore vary. Please feed me patches, pull requests and bug r
 [8]: http://mathieuravaux.com/
 [9]: http://www.jonswope.com/
 [10]: http://weblogs.manas.com.ar/ary
+[11]: https://github.com/neerajpn47
+[12]: https://github.com/ivmaykov
