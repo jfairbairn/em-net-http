@@ -166,7 +166,7 @@ module Net
         }
         httpreq.errback {|err|f.resume(:error)}
 
-        nhres = yield_with_error_check
+        nhres = yield_with_error_check(t0)
         nhres.instance_variable_set :@httpreq, httpreq
 
         yield nhres
@@ -175,13 +175,13 @@ module Net
         httpreq.callback &convert_em_http_response
         httpreq.errback {|err|f.resume(:error)}
 
-        yield_with_error_check
+        yield_with_error_check(t0)
       end
     end
 
     private
 
-    def yield_with_error_check
+    def yield_with_error_check(t0)
       res = Fiber.yield
 
       if res == :error
