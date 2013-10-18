@@ -146,7 +146,11 @@ module Net
         nhresclass = Net::HTTPResponse.response_class(emres.code)
         nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
         emres.to_hash.each do |k, v|
-          nhres.add_field(k, v)
+          if v.is_a?(Array)
+            v.each {|e| nhres.add_field(k, e)}
+          else
+            nhres.add_field(k, v)
+          end
         end
         nhres.body = emres.body if req.response_body_permitted? && nhresclass.body_permitted?
         nhres.instance_variable_set '@read', true
@@ -161,7 +165,11 @@ module Net
           nhresclass = Net::HTTPResponse.response_class(emres.code)
           nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
           emres.to_hash.each do |k, v|
-            nhres.add_field(k, v)
+            if v.is_a?(Array)
+              v.each {|e| nhres.add_field(k, e)}
+            else
+              nhres.add_field(k, v)
+            end
           end
           f.resume nhres
         }
