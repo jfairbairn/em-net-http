@@ -126,6 +126,7 @@ module Net
         sslopts[:cert_chain_file] = ca_file if ca_file
       end
       opts[:timeout] = self.read_timeout
+      opts[:decoding] = false
 
       headers = opts[:head] = {}
       req.each do |k, v|
