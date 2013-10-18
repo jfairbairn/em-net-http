@@ -135,8 +135,10 @@ module Net
       headers['content-type'] ||= "application/x-www-form-urlencoded"
 
       t0 = Time.now
+      http = EM::HttpRequest.new(uri)
       request_method = (req.respond_to?(:method) ? req.method : req.class::METHOD).downcase.to_sym
-      httpreq = EM::HttpRequest.new(uri).send(request_method, opts)
+      request_method = :"a#{request_method}" if http.respond_to?(:"a#{request_method}")
+      httpreq = http.send(request_method, opts)
 
       f=Fiber.current
 
