@@ -126,6 +126,7 @@ module Net
         sslopts[:cert_chain_file] = ca_file if ca_file
       end
       opts[:timeout] = self.read_timeout
+      opts[:decoding] = false
 
       headers = opts[:head] = {}
       req.each do |k, v|
@@ -135,8 +136,10 @@ module Net
       headers['content-type'] ||= "application/x-www-form-urlencoded"
 
       t0 = Time.now
+      http = EM::HttpRequest.new(uri)
       request_method = (req.respond_to?(:method) ? req.method : req.class::METHOD).downcase.to_sym
-      httpreq = EM::HttpRequest.new(uri).send(request_method, opts)
+      request_method = :"a#{request_method}" if http.respond_to?(:"a#{request_method}")
+      httpreq = http.send(request_method, opts)
 
       f=Fiber.current
 
@@ -146,7 +149,11 @@ module Net
         nhresclass = Net::HTTPResponse.response_class(emres.code)
         nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
         emres.to_hash.each do |k, v|
-          nhres.add_field(k, v)
+          if v.is_a?(Array)
+            v.each {|e| nhres.add_field(k, e)}
+          else
+            nhres.add_field(k, v)
+          end
         end
         nhres.body = emres.body if req.response_body_permitted? && nhresclass.body_permitted?
         nhres.instance_variable_set '@read', true
@@ -161,7 +168,11 @@ module Net
           nhresclass = Net::HTTPResponse.response_class(emres.code)
           nhres = nhresclass.new(emres.http_version, emres.code, emres.message)
           emres.to_hash.each do |k, v|
-            nhres.add_field(k, v)
+            if v.is_a?(Array)
+              v.each {|e| nhres.add_field(k, e)}
+            else
+              nhres.add_field(k, v)
+            end
           end
           f.resume nhres
         }
