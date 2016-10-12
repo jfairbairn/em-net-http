@@ -1,6 +1,11 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "em-net-http" do
+  around(:each) do |example|
+    Fiber.new do
+      example.run
+    end.resume
+  end
 
   it 'should support streaming the response' do
     assert_identical(:streamed => true) {
