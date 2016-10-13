@@ -1,7 +1,12 @@
 require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 
 describe "em-net-http" do
-
+  around(:each) do |example|
+    Fiber.new do
+      example.run
+    end.resume
+  end
+  
   it 'should support streaming the response' do
     assert_identical(:streamed => true) {
       body = StringIO.new '', 'wb'
@@ -54,7 +59,7 @@ describe "em-net-http" do
           end
         }
       end
-  
+
       it "for Net::HTTP.new(host, port).start(&block) with response code #{code}" do
         assert_identical {
           h = Net::HTTP.new('localhost', Mimic::MIMIC_DEFAULT_PORT)
@@ -64,7 +69,7 @@ describe "em-net-http" do
         }
       end
     end
-    
+
     it "with response code 304" do
       assert_identical {
         Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
@@ -73,9 +78,9 @@ describe "em-net-http" do
           http.request(req)
         end
       }
-      
+
     end
-    
+
     it 'with post' do
       assert_identical {
         Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
@@ -84,11 +89,11 @@ describe "em-net-http" do
           http.request(req)
         end
       }
-      
+
     end
-    
+
   end
-  
+
   def run_requests(&block)
     @expected_res = yield
     EM.run do
@@ -100,23 +105,23 @@ describe "em-net-http" do
       end
     end
   end
-  
+
   def assert_identical(streamed=false, &block)
     run_requests(&block)
     @actual_res.should be_a_kind_of(Net::HTTPResponse)
     @actual_res.should match_response(@expected_res, :streamed => streamed)
   end
-  
+
   def match_response(expected, streamed=false)
     ResponseMatcher.new(expected, streamed)
   end
-  
+
   class ResponseMatcher
     def initialize(expected, streamed=false)
       @expected = expected
       @streamed = streamed
     end
-    
+
     def matches?(actual)
       # Dates could differ slightly :(
       expected_date = Time.parse(@expected.delete('date').join)
@@ -136,6 +141,6 @@ describe "em-net-http" do
       end
       true
     end
-    
+
   end
 end
