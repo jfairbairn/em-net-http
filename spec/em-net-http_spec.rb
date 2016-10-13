@@ -6,7 +6,7 @@ describe "em-net-http" do
       example.run
     end.resume
   end
-  
+
   it 'should support streaming the response' do
     assert_identical(:streamed => true) {
       body = StringIO.new '', 'wb'
