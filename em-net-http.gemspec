@@ -26,8 +26,7 @@ Gem::Specification.new do |s|
     "lib/test_weary.rb",
     "spec/em-net-http_spec.rb",
     "spec/image.jpg",
-    "spec/spec.opts",
-    "spec/spec_helper.rb"
+    "spec/spec.opts"
   ]
   s.homepage = %q{http://github.com/jfairbairn/em-net-http}
   s.require_paths = ["lib"]
@@ -41,4 +40,3 @@ Gem::Specification.new do |s|
   s.add_development_dependency(%q<mimic>, [">= 0.3.0"])
   s.add_development_dependency(%q<weary>, [">= 0"])
 end
-
