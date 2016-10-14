@@ -1,4 +1,8 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'em-net-http'
+require 'time'
+require 'rspec'
 require 'mimic'
 
 describe "em-net-http" do
@@ -131,13 +135,18 @@ describe "em-net-http" do
   end
 
   it 'should raise relevant exceptions' do
-    begin
-      Net::HTTP.start('localhost', 1) do |r|
-        r.get('/')
-      end
-      fail('expected exception to be raised')
-    rescue => expected
-      expected.class.should == Errno::ECONNREFUSED
+    EM.run do
+      Fiber.new do
+        begin
+          Net::HTTP.start('localhost', 1) do |r|
+            r.get('/')
+          end
+          fail('expected exception to be raised')
+        rescue => expected
+          expected.class.should == Errno::ECONNREFUSED
+          EM.stop_event_loop
+        end
+      end.resume
     end
   end
 
