@@ -39,7 +39,8 @@ Your mileage may therefore vary. Please feed me patches, pull requests and bug r
 ### Thanks
 
  * [Luke Redpath][7], for [Mimic][6].
- * [Mathieu Ravaux][8], for adding streaming and buffering support.
+ * [Mathieu Ravaux][8], for [adding streaming and buffering support][15].
+ * [Paul Bonaud][13], for [improving exception raising][14].
  * [Jon Swope][9], [Ary Borenszweig][10], [Neeraj][11] and [Ilya Maykov][12] for bug fixes.
 
 [1]: http://github.com/igrigorik/em-http-request
@@ -54,3 +55,6 @@ Your mileage may therefore vary. Please feed me patches, pull requests and bug r
 [10]: http://weblogs.manas.com.ar/ary
 [11]: https://github.com/neerajpn47
 [12]: https://github.com/ivmaykov
+[13]: http://paul.bonaud.fr/
+[14]: https://github.com/jfairbairn/em-net-http/pull/9
+[15]: https://github.com/jfairbairn/em-net-http/pull/1
