@@ -4,7 +4,7 @@ Most Ruby web API libraries use <tt>Net::HTTP</tt> (because it's ubiquitous),
 but I want to use them in my non-blocking EventMachine-based applications, and
 I don't want Net::HTTP to block. I therefore wrote this.
 
-Using the magic of Ruby 1.9's Fibers, we monkeypatch <tt>Net::HTTP</tt> to use
+Using the magic of Ruby's Fibers, we monkeypatch <tt>Net::HTTP</tt> to use
 the faster, nonblocking <tt>[em-http-request][1]</tt> under the hood. Obviously this
 will only work from inside the [EventMachine][2] event loop, and from within a spawned
 fiber:
@@ -29,7 +29,7 @@ These are by no means exhaustive; if you're using <tt>Net::HTTP</tt> in some oth
 and the <tt>em-net-http</tt>'s behaviour is not what you expect, do send me a failing test
 case.
 
-Currently tested with Ruby (MRI) 1.9.1 and 1.9.2.
+Currently tested with Ruby (MRI) 2.2.3 and 2.3.1.
 
 ### Caveat
 
