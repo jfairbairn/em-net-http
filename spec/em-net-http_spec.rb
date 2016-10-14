@@ -8,7 +8,7 @@ describe "em-net-http" do
   end
 
   it 'should support streaming the response' do
-    assert_identical(:streamed => true) {
+    assert_identical(true) {
       body = StringIO.new '', 'wb'
 
       Net::HTTP.start('localhost', Mimic::MIMIC_DEFAULT_PORT) do |http|
@@ -109,7 +109,7 @@ describe "em-net-http" do
   def assert_identical(streamed=false, &block)
     run_requests(&block)
     @actual_res.should be_a_kind_of(Net::HTTPResponse)
-    @actual_res.should match_response(@expected_res, :streamed => streamed)
+    @actual_res.should match_response(@expected_res, streamed)
   end
 
   def match_response(expected, streamed=false)
